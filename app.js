@@ -14,7 +14,8 @@ const versus = document.getElementsByTagName("h2");
 const gameState = {
     currentPlayer: "Player 1",
     playerOneName: "",
-    playerTwoName: ""
+    playerTwoName: "",
+    playersSelected: false
 }
 
 //Generate blank board
@@ -34,7 +35,7 @@ const cells = document.getElementsByClassName("cell");
 //clicking adds an x to the board
 
 board.addEventListener("click", (event) => {
-   if (event.target.tagName === "DIV"){ 
+   if (event.target.tagName === "DIV" && gameState.playersSelected === true){ 
     if(gameState.currentPlayer === gameState.playerOneName) {
         const targetCell = event.target;
         targetCell.innerHTML = '<i class="fa-solid fa-x"></i>';
@@ -65,6 +66,9 @@ playersSection.addEventListener("click", (event) => {
     if (gameState.playerOneName !== "" && gameState.playerTwoName !== "") {
         versus[0].innerText = `It's ${gameState.playerOneName} vs ${gameState.playerTwoName}`;
         versus[0].style.display = "block";
+        gameState.currentPlayer = gameState.playerOneName;
+        currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
+        gameState.playersSelected = true;
     }
 });
 
