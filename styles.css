@@ -25,7 +25,7 @@
   }
 
   #current-player {
-    display: flex;
+    display: none;
     justify-content: center;
     margin-bottom: 10px;
   }
