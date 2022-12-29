@@ -17,7 +17,8 @@ const gameState = {
     playerOneName: "",
     playerTwoName: "",
     playersSelected: false,
-    boardState: [["", "", ""], ["", "", ""], ["", "", ""]]
+    boardState: [["", "", ""], ["", "", ""], ["", "", ""]],
+    winner: ""
 }
 
 //Generate blank board
@@ -29,59 +30,10 @@ const makeBoard = () => {
         board.appendChild(newDiv);
     }
 }
-
-//Initial Run
-// makeBoard();
-// const cells = document.getElementsByClassName("cell");
-
-//clicking adds an x to the board
-
-board.addEventListener("click", (event) => {
-   if (event.target.tagName === "DIV" && gameState.playersSelected === true){ 
-    if(gameState.currentPlayer === gameState.playerOneName) {
-        const targetCell = event.target;
-        targetCell.innerHTML = '<i class="fa-solid fa-x"></i>';
-        gameState.currentPlayer = gameState.playerTwoName;
-        currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
-    } else {
-        const targetCell = event.target;
-        targetCell.innerHTML = '<i class="fa-solid fa-o"></i>';
-        gameState.currentPlayer = gameState.playerOneName;
-        currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
-    }
-   }
-   console.log(gameState.currentPlayer);
-});
-
-//Click to set player names
-playersSection.addEventListener("click", (event) => {
-    const buttonId = event.target.getAttribute("id");
-    if(buttonId === "player-one-button") {
-        gameState.playerOneName = playerOneInput.value;
-        playerOneInput.value = "";
-        playerOneSection.style.display = "none";
-    } else if (buttonId === "player-two-button") {
-        gameState.playerTwoName = playerTwoInput.value;
-        playerTwoInput.value = "";
-        playerTwoSection.style.display = "none";
-    }
-    if (gameState.playerOneName !== "" && gameState.playerTwoName !== "") {
-        versus[0].innerText = `It's ${gameState.playerOneName} vs ${gameState.playerTwoName}`;
-        versus[0].style.display = "block";
-        gameState.currentPlayer = gameState.playerOneName;
-        currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
-        currentPlayerDisplay.style.display = "flex";
-        gameState.playersSelected = true;
-        makeBoard();
-        const cells = document.getElementsByClassName("cell");
-    }
-});
-
 // Check for victory
 //get the content of the board
 const getBoardState = (array) => {
     let count = 0;
-    console.log (array[count].innerHTML);
     for(let i = 0; i < 3; i++){
         for(let j = 0; j < 3; j++){
             const cellStatus = array[count].innerHTML;
@@ -114,18 +66,147 @@ const getCol = (array, index) => {
     }
     return col;
 }
-//check for 3 in a row vertically
+//flatten the board array
+const flattenBoard = (array) => {
+    let flatArray = [];
+    for(let i = 0; i < array.length; i++) {
+        for(let j = 0; j < array[i].length; j++){
+            flatArray.push(array[i][j]);
+        }
+    }
+    return flatArray;
+}
 
-//check for 3 in a row horizontally
-//check for 3 in a row diagonally
+//get a diagonal section of the board
+const getDiag = (array, index) => {
+    array = flattenBoard(array);
+    let diag = [];
+    if (index === 0){
+        for(let i = index; i < array.length; i+= 4) {
+            diag.push(array[i]);
+        }
+    }
+    if (index === 2){
+        for(let i = index; i < 7; i+= 2){
+            diag.push(array[i]);
+        }
+    }
+    return diag;
+}
+
+
+const winCheck = (array) => {
+    let rowWin = false;
+    for (let i = 0; i < 3; i++){ 
+        const testRow = getRow(array, i);
+        if(testRow[0] !== ""){
+            if(testRow[0] === testRow[1] && testRow[0] === testRow[2]){
+                rowWin = true;
+            }
+           }
+        }
+    let colWin = false;
+    for (let i = 0; i < 3; i++){
+        const testCol = getCol(array, i);
+        if(testCol[0] !== ""){
+            if(testCol[0] === testCol[1] && testCol[0] === testCol[2]) {
+                colWin = true;
+            }
+    }
+}   
+    let diagWin = false;
+    for (let i = 0; i < 3; i+=2){
+        const testDiag = getDiag(array, i);
+        if(testDiag[0] !== ""){
+            if(testDiag[0] === testDiag[1] && testDiag[0] === testDiag[2]) {
+                diagWin = true;
+            }
+        }
+    }
+
+    if (rowWin || colWin || diagWin){
+        return true;
+    } else{
+        return false;
+    }
+}
+//Initial Run
+// makeBoard();
+// const cells = document.getElementsByClassName("cell");
+
+//clicking adds an x to the board
+
+board.addEventListener("click", (event) => {
+   if (event.target.tagName === "DIV" && gameState.playersSelected === true && !gameState.winner){ 
+    if(gameState.currentPlayer === gameState.playerOneName) {
+        const targetCell = event.target;
+        targetCell.innerHTML = '<i class="fa-solid fa-x"></i>';
+        getBoardState(document.getElementsByClassName("cell"));
+        const isWinner = winCheck(gameState.boardState);
+        if (isWinner){
+            gameState.winner = gameState.currentPlayer;
+            alert(`${gameState.winner} wins!`);
+            currentPlayerDisplay.innerText = `${gameState.winner} is the winner!`;
+            return;
+        }
+        gameState.currentPlayer = gameState.playerTwoName;
+        currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
+    } else {
+        const targetCell = event.target;
+        targetCell.innerHTML = '<i class="fa-solid fa-o"></i>';
+        getBoardState(document.getElementsByClassName("cell"));
+        const isWinner = winCheck(gameState.boardState);
+        if (isWinner){
+            gameState.winner = gameState.currentPlayer;
+            alert(`${gameState.winner} wins!`);
+            currentPlayerDisplay.innerText = `${gameState.winner} is the winner!`;
+            return;
+        }
+        gameState.currentPlayer = gameState.playerOneName;
+        currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
+    }
+   }
+});
+
+//Click to set player names
+playersSection.addEventListener("click", (event) => {
+    const buttonId = event.target.getAttribute("id");
+    if(buttonId === "player-one-button") {
+        gameState.playerOneName = playerOneInput.value;
+        playerOneInput.value = "";
+        playerOneSection.style.display = "none";
+    } else if (buttonId === "player-two-button") {
+        gameState.playerTwoName = playerTwoInput.value;
+        playerTwoInput.value = "";
+        playerTwoSection.style.display = "none";
+    }
+    if (gameState.playerOneName !== "" && gameState.playerTwoName !== "") {
+        versus[0].innerText = `It's ${gameState.playerOneName} vs ${gameState.playerTwoName}`;
+        versus[0].style.display = "block";
+        gameState.currentPlayer = gameState.playerOneName;
+        currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
+        currentPlayerDisplay.style.display = "flex";
+        gameState.playersSelected = true;
+        makeBoard();
+        const cells = document.getElementsByClassName("cell");
+    }
+});
+
+
 
 //Test button
 testButton.addEventListener("click", () => {
     const board = getBoardState(document.getElementsByClassName("cell"));
     // console.log(document.getElementsByClassName("cell"));
-    console.log(gameState.boardState);
-    console.log(getRow(gameState.boardState, 0));
-    console.log(getCol(gameState.boardState, 1));
+    // console.log(gameState.boardState);
+    // console.log(getRow(gameState.boardState, 0));
+    // console.log(getCol(gameState.boardState, 1));
+    // console.log(flattenBoard(gameState.boardState));
+    // console.log(getDiag(gameState.boardState, 0));
+    // console.log(getDiag(gameState.boardState, 2))
+    // console.log(winCheck(getRow(gameState.boardState, 0)));
+    console.log(winCheck(gameState.boardState));
+    
 });
 
 //Bugs
