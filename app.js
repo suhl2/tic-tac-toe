@@ -130,6 +130,17 @@ const winCheck = (array) => {
         return false;
     }
 }
+
+//check for a tie
+const tieCheck = (array) => {
+    const board = flattenBoard(array);
+    for (let i = 0; i < board.length; i++){
+        if(!board[i]) {
+            return false;
+        }
+    }
+    return true;
+}
 //Initial Run
 // makeBoard();
 // const cells = document.getElementsByClassName("cell");
@@ -147,6 +158,12 @@ board.addEventListener("click", (event) => {
             gameState.winner = gameState.currentPlayer;
             alert(`${gameState.winner} wins!`);
             currentPlayerDisplay.innerText = `${gameState.winner} is the winner!`;
+            return;
+        }
+        const isTie = tieCheck(gameState.boardState);
+        if (isTie){
+            alert("The game is a draw.");
+            currentPlayerDisplay.innerText = "The game is a draw";
             return;
         }
         gameState.currentPlayer = gameState.playerTwoName;
@@ -205,9 +222,14 @@ testButton.addEventListener("click", () => {
     // console.log(getDiag(gameState.boardState, 0));
     // console.log(getDiag(gameState.boardState, 2))
     // console.log(winCheck(getRow(gameState.boardState, 0)));
-    console.log(winCheck(gameState.boardState));
+    // console.log(winCheck(gameState.boardState));
+    console.log(tieCheck(gameState.boardState));
     
 });
 
 //Bugs
 //entering same name means players don't switch
+
+//To Do
+//check for tie
+//reset game button
