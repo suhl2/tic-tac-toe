@@ -10,6 +10,7 @@ const playerTwoSection = document.getElementById("player-two");
 const currentPlayerDisplay = document.getElementById("current-player");
 const versus = document.getElementsByTagName("h2");
 const testButton = document.getElementById("test");
+const newGameButton = document.getElementById("new-game");
 
 //Game State
 const gameState = {
@@ -158,12 +159,14 @@ board.addEventListener("click", (event) => {
             gameState.winner = gameState.currentPlayer;
             alert(`${gameState.winner} wins!`);
             currentPlayerDisplay.innerText = `${gameState.winner} is the winner!`;
+            newGameButton.style.display = "flex";
             return;
         }
         const isTie = tieCheck(gameState.boardState);
         if (isTie){
             alert("The game is a draw.");
             currentPlayerDisplay.innerText = "The game is a draw";
+            newGameButton.style.display = "flex";
             return;
         }
         gameState.currentPlayer = gameState.playerTwoName;
@@ -177,6 +180,7 @@ board.addEventListener("click", (event) => {
             gameState.winner = gameState.currentPlayer;
             alert(`${gameState.winner} wins!`);
             currentPlayerDisplay.innerText = `${gameState.winner} is the winner!`;
+            newGameButton.style.display = "flex";
             return;
         }
         gameState.currentPlayer = gameState.playerOneName;
@@ -231,5 +235,6 @@ testButton.addEventListener("click", () => {
 //entering same name means players don't switch
 
 //To Do
-//check for tie
 //reset game button
+//computer player stuff
+//0 player easter egg
