@@ -56,6 +56,7 @@
 
   #players {
     margin-left: 5%;
+    display: none;
   }
 
   #new-game-section {
@@ -66,4 +67,24 @@
   #new-game {
     margin: 10px;
     display: none;
+  }
+
+  #select-player-number {
+    text-align: center;
+    margin-top: 10%;
+    font-size: 3em;
+  }
+  
+  #select-player-number button {
+    font-size: 0.5em;
+    background-color: black;
+    color: white;
+    border: 2px dotted white;
+  }
+
+  #select-player-number input {
+    font-size: 0.5em;
+    background-color: black;
+    color: white;
+    border: 2px dotted white;
   }

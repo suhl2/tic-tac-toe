@@ -11,9 +11,13 @@ const currentPlayerDisplay = document.getElementById("current-player");
 const versus = document.getElementsByTagName("h2");
 const testButton = document.getElementById("test");
 const newGameButton = document.getElementById("new-game");
+const playerNumberSection = document.getElementById("select-player-number");
+const playerNumberInput = document.getElementById("player-number-input");
+const playerNumberButton = document.getElementById("player-number-button");
 
 //Game State
 const gameState = {
+    numberOfPlayers: 0,
     currentPlayer: "Player 1",
     playerOneName: "",
     playerTwoName: "",
@@ -178,6 +182,24 @@ const computerTurn = () => {
         currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
     }
 }
+//Set number of players
+
+playerNumberButton.addEventListener("click", () => {
+    const inputValue = Number(playerNumberInput.value);
+    if(inputValue > 2 || inputValue.value < 0) {
+        alert("The maximum number of players is 2 and the minimum number of players is 0");
+        playerNumberInput.value = "";
+    } else if (!inputValue){
+        alert("Please enter a valid number");
+        playerNumberInput.value = "";
+    }
+    else {
+        playerNumberSection.style.display = "none";
+        playersSection.style.display = "block";
+        gameState.numberOfPlayers = playerNumberInput.value;
+        playerNumberInput.value = "";
+    }
+} );
 
 //Click functionality
 
@@ -255,6 +277,7 @@ playersSection.addEventListener("click", (event) => {
 
 //Reset Game
 const resetGame = () => {
+    gameState.numberOfPlayers = 0;
     gameState.currentPlayer = "Player 1";
     gameState.playersSelected = false;
     gameState.boardState = [["", "", ""], ["", "", ""], ["", "", ""]];
@@ -295,5 +318,12 @@ testButton.addEventListener("click", () => {
 //Bugs
 
 //To Do
-//computer player stuff
+//make computer smarter
 //0 player easter egg
+//add function that sets number of players
+//add different icons to use
+
+//Cleanup
+//remove console.logs
+//remove test button
+//clean up code
