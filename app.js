@@ -145,15 +145,37 @@ const tieCheck = (array) => {
 
 //Computer AI
 const computerTurn = () => {
-    const currentBoard = document.getElementsByClassName("cell");
-    console.log(currentBoard);
-    console.log("hey");
-    for(let i = 0; i < currentBoard.length; i++){
-        if(!currentBoard[i].innerHTML){
-            currentBoard[i].innerHTML = '<i class="fa-solid fa-x"></i>';
-            console.log("listen");
+    if(gameState.currentPlayer === "Computer"){
+        const currentBoard = document.getElementsByClassName("cell");
+        console.log(currentBoard);
+        console.log("hey");
+        for(let i = 0; i < currentBoard.length; i++){
+            if(!currentBoard[i].innerHTML){
+                currentBoard[i].innerHTML = '<i class="fa-solid fa-x"></i>';
+                console.log("listen");
+                break;
+            }
+        }
+        getBoardState(document.getElementsByClassName("cell"));
+        const isWinner = winCheck(gameState.boardState);
+        if (isWinner){
+            gameState.winner = gameState.currentPlayer;
+            alert(`${gameState.winner} wins!`);
+            currentPlayerDisplay.innerText = `${gameState.winner} is the winner!`;
+            newGameButton.style.display = "flex";
+            clearInterval(computerInterval);
             return;
         }
+        const isTie = tieCheck(gameState.boardState);
+        if (isTie){
+            alert("The game is a draw.");
+            currentPlayerDisplay.innerText = "The game is a draw";
+            newGameButton.style.display = "flex";
+            clearInterval(computerInterval);
+            return;
+        }
+        gameState.currentPlayer = gameState.playerTwoName;
+        currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
     }
 }
 
@@ -248,6 +270,9 @@ const resetGame = () => {
 }
 
 newGameButton.addEventListener("click", resetGame);
+
+//listen to see if it's computer turn
+const computerInterval = setInterval(computerTurn, 1000);
 
 
 
