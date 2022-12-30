@@ -95,7 +95,7 @@ const getDiag = (array, index) => {
     return diag;
 }
 
-
+//Check for a win
 const winCheck = (array) => {
     let rowWin = false;
     for (let i = 0; i < 3; i++){ 
@@ -142,11 +142,22 @@ const tieCheck = (array) => {
     }
     return true;
 }
-//Initial Run
-// makeBoard();
-// const cells = document.getElementsByClassName("cell");
 
-//clicking adds an x to the board
+//Computer AI
+const computerTurn = () => {
+    const currentBoard = document.getElementsByClassName("cell");
+    console.log(currentBoard);
+    console.log("hey");
+    for(let i = 0; i < currentBoard.length; i++){
+        if(!currentBoard[i].innerHTML){
+            currentBoard[i].innerHTML = '<i class="fa-solid fa-x"></i>';
+            console.log("listen");
+            return;
+        }
+    }
+}
+
+//Click functionality
 
 board.addEventListener("click", (event) => {
    if (event.target.tagName === "DIV" && gameState.playersSelected === true && !gameState.winner){ 
@@ -200,8 +211,15 @@ playersSection.addEventListener("click", (event) => {
         gameState.playerTwoName = playerTwoInput.value;
         playerTwoInput.value = "";
         playerTwoSection.style.display = "none";
+    } else if (buttonId === "computer") {
+        gameState.playerOneName = "Computer";
+        playerOneInput.value = "";
+        playerOneSection.style.display = "none";
     }
     if (gameState.playerOneName !== "" && gameState.playerTwoName !== "") {
+        if(gameState.playerOneName === gameState.playerTwoName){
+            gameState.playerTwoName += "2";
+        }
         versus[0].innerText = `It's ${gameState.playerOneName} vs ${gameState.playerTwoName}`;
         versus[0].style.display = "block";
         gameState.currentPlayer = gameState.playerOneName;
@@ -245,14 +263,12 @@ testButton.addEventListener("click", () => {
     // console.log(getDiag(gameState.boardState, 2))
     // console.log(winCheck(getRow(gameState.boardState, 0)));
     // console.log(winCheck(gameState.boardState));
-    console.log(tieCheck(gameState.boardState));
+    computerTurn();
     
 });
 
 //Bugs
-//entering same name means players don't switch
 
 //To Do
-//reset game button
 //computer player stuff
 //0 player easter egg
