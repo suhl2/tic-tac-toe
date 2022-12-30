@@ -213,6 +213,24 @@ playersSection.addEventListener("click", (event) => {
     }
 });
 
+//Reset Game
+const resetGame = () => {
+    gameState.currentPlayer = "Player 1";
+    gameState.playersSelected = false;
+    gameState.boardState = [["", "", ""], ["", "", ""], ["", "", ""]];
+    gameState.winner = "";
+    gameState.playerOneName = "";
+    gameState.playerTwoName = "";
+    board.innerHTML = "";
+    currentPlayerDisplay.innerText = "";
+    versus[0].innerText = "";
+    playerOneSection.style.display = "block";
+    playerTwoSection.style.display = "block";
+    newGameButton.style.display = "none";
+}
+
+newGameButton.addEventListener("click", resetGame);
+
 
 
 //Test button
