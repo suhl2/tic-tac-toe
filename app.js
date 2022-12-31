@@ -182,6 +182,37 @@ const computerTurn = () => {
         currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
     }
 }
+
+//computer will go for the win if possible
+//need to have it check for specifically computer win, not just open spot
+const computerWinPossible = () => {
+    getBoardState(document.getElementsByClassName("cell"));
+    for(let i = 0; i < gameState.boardState.length; i++) {
+        const row = getRow(gameState.boardState, i);
+        let openSlots = [];
+        let occupiedSlots = [];
+        for (let j = 0; j < row.length; j++){
+            if(!row[j]) {
+                openSlots.push(j);
+            } else {
+                occupiedSlots.push(row[j]);
+            }
+        }
+        console.log(openSlots);
+        console.log(occupiedSlots)
+        if(openSlots.length === 1 && occupiedSlots.length == 2 && occupiedSlots[0] === occupiedSlots[1]){
+            console.log("You can play here");
+        }
+
+    }
+}
+    
+
+
+//if not, computer will go for a block if possible
+//if not, copmuter will choose a random square
+
+
 //Set number of players
 
 playerNumberButton.addEventListener("click", () => {
@@ -311,8 +342,7 @@ testButton.addEventListener("click", () => {
     // console.log(getDiag(gameState.boardState, 2))
     // console.log(winCheck(getRow(gameState.boardState, 0)));
     // console.log(winCheck(gameState.boardState));
-    computerTurn();
-    
+    computerWinPossible();
 });
 
 //Bugs
