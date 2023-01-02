@@ -15,6 +15,7 @@ const playerNumberSection = document.getElementById("select-player-number");
 const playerNumberInput = document.getElementById("player-number-input");
 const playerNumberButton = document.getElementById("player-number-button");
 
+//create computer interval so we can call it later if needed
 let computerInterval = null;
 
 //Game State
@@ -264,18 +265,29 @@ const computerWinPossible = () => {
 
 playerNumberButton.addEventListener("click", () => {
     const inputValue = Number(playerNumberInput.value);
-    if(inputValue > 2 || inputValue.value < 0) {
+    if(inputValue > 2 || inputValue < 0) {
         alert("The maximum number of players is 2 and the minimum number of players is 0");
         playerNumberInput.value = "";
-    } else if (!inputValue){
+    } else if (!inputValue && inputValue !== 0){
         alert("Please enter a valid number");
         playerNumberInput.value = "";
     }
     else {
-        playerNumberSection.style.display = "none";
-        playersSection.style.display = "block";
-        gameState.numberOfPlayers = playerNumberInput.value;
-        playerNumberInput.value = "";
+        if(inputValue === 1){
+            playerNumberSection.style.display = "none";
+            playersSection.style.display = "block";
+            playerOneSection.style.display = "none";
+            gameState.numberOfPlayers = inputValue;
+            playerNumberInput.value = "";
+            gameState.playerOneName = "Computer";
+        } else if(inputValue === 2) {
+            playerNumberSection.style.display = "none";
+            playersSection.style.display = "block";
+            gameState.numberOfPlayers = inputValue;
+            playerNumberInput.value = "";
+        } else {
+            alert("Cool easter egg will be added soon!")
+        }
     }
 } );
 
@@ -350,7 +362,7 @@ playersSection.addEventListener("click", (event) => {
         gameState.playersSelected = true;
         makeBoard();
         const cells = document.getElementsByClassName("cell");
-        computerInterval = setInterval(computerTurn, 1000);
+        computerInterval = setInterval(computerTurn, 500);
     }
 });
 
@@ -390,14 +402,16 @@ testButton.addEventListener("click", () => {
 });
 
 //Bugs
+//clicking new game doesn't ask number of players
+//X or O won't display until after win/draw alert is closed
 
 //To Do
 //make computer smarter
-//0 player easter egg
-//add function that sets number of players
+//0 player easter egg 
 //add different icons to use
 
 //Cleanup
 //remove console.logs
+//remove computer button
 //remove test button
 //clean up code
