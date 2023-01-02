@@ -15,6 +15,8 @@ const playerNumberSection = document.getElementById("select-player-number");
 const playerNumberInput = document.getElementById("player-number-input");
 const playerNumberButton = document.getElementById("player-number-button");
 
+let computerInterval = null;
+
 //Game State
 const gameState = {
     numberOfPlayers: 0,
@@ -155,7 +157,7 @@ const computerTurn = () => {
         console.log("hey");
         const compCanWin = computerWinPossible();
         if (compCanWin){
-            currentBoard[compCanWin].innerHTML = '<p>computer wins here</p>';
+            currentBoard[compCanWin].innerHTML = '<i class="fa-solid fa-x"></i>';
         } else{
             for(let i = 0; i < currentBoard.length; i++){
                 if(!currentBoard[i].innerHTML){
@@ -348,7 +350,7 @@ playersSection.addEventListener("click", (event) => {
         gameState.playersSelected = true;
         makeBoard();
         const cells = document.getElementsByClassName("cell");
-        const computerInterval = setInterval(computerTurn, 1000);
+        computerInterval = setInterval(computerTurn, 1000);
     }
 });
 
