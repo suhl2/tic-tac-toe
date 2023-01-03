@@ -157,8 +157,11 @@ const computerTurn = () => {
         console.log(currentBoard);
         console.log("hey");
         const compCanWin = computerWinPossible();
+        const compCanBlock = computerBlockPossible();
         if (compCanWin){
             currentBoard[compCanWin].innerHTML = '<i class="fa-solid fa-x"></i>';
+        } else if(compCanBlock){
+            currentBoard[compCanBlock].innerHTML = '<i class="fa-solid fa-x"></i>';
         } else{
             for(let i = 0; i < currentBoard.length; i++){
                 if(!currentBoard[i].innerHTML){
@@ -258,6 +261,67 @@ const computerWinPossible = () => {
 
 
 //if not, computer will go for a block if possible
+const computerBlockPossible = () => {
+    getBoardState(document.getElementsByClassName("cell"));
+    //check rows for possible block
+    for(let i = 0; i < gameState.boardState.length; i++) {
+        const row = getRow(gameState.boardState, i);
+        let openSlots = [];
+        let openSlotIdx = -1;
+        let occupiedSlots = [];
+        for (let j = 0; j < row.length; j++){
+            if(!row[j]) {
+                openSlots.push(j);
+                openSlotIdx = j;
+            } else if(row[j] === "O") {
+                occupiedSlots.push(row[j]);
+            }
+        }
+        if(openSlots.length === 1 && occupiedSlots.length == 2 && occupiedSlots[0] === occupiedSlots[1]){
+            return (i * 3) + openSlotIdx;
+        }
+    }
+    //check columns for possible win
+    for(let i = 0; i < gameState.boardState.length; i++) {
+        const col = getCol(gameState.boardState, i);
+        let openSlots = [];
+        let openSlotIdx = -1;
+        let occupiedSlots = [];
+        for (let j = 0; j < col.length; j++){
+            if(!col[j]) {
+                openSlots.push(j);
+                openSlotIdx = j;
+            } else if(col[j] === "O") {
+                occupiedSlots.push(col[j]);
+            }
+        }
+        if(openSlots.length === 1 && occupiedSlots.length == 2 && occupiedSlots[0] === occupiedSlots[1]){
+            return (openSlotIdx * 3) + i;
+        }
+    }
+    //check diagonals for possible win
+    for(let i = 0; i < 3; i+=2) {
+        const diag = getDiag(gameState.boardState, i);
+        let openSlots = [];
+        let openSlotIdx = -1;
+        let occupiedSlots = [];
+        for (let j = 0; j < diag.length; j++){
+            if(!diag[j]) {
+                openSlots.push(j);
+                if(i === 0){
+                    openSlotIdx = j * 4;
+                } else {
+                    openSlotIdx = (j * 2) + 2;
+                }
+            } else if(diag[j] === "O") {
+                occupiedSlots.push(diag[j]);
+            }
+        }
+        if(openSlots.length === 1 && occupiedSlots.length == 2 && occupiedSlots[0] === occupiedSlots[1]){
+            return openSlotIdx;
+        }
+    }
+}
 //if not, copmuter will choose a random square
 
 
@@ -397,8 +461,10 @@ testButton.addEventListener("click", () => {
     // console.log(getDiag(gameState.boardState, 2))
     // console.log(winCheck(getRow(gameState.boardState, 0)));
     // console.log(winCheck(gameState.boardState));
-    const isWin = computerWinPossible();
-    console.log(isWin);
+    // const isWin = computerWinPossible();
+    // console.log(isWin);
+    const isBlock = computerBlockPossible();
+    console.log(isBlock);
 });
 
 //Bugs
