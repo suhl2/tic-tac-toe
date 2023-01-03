@@ -163,13 +163,23 @@ const computerTurn = () => {
         } else if(compCanBlock){
             currentBoard[compCanBlock].innerHTML = '<i class="fa-solid fa-x"></i>';
         } else{
-            for(let i = 0; i < currentBoard.length; i++){
-                if(!currentBoard[i].innerHTML){
-                    currentBoard[i].innerHTML = '<i class="fa-solid fa-x"></i>';
-                    console.log("listen");
-                    break;
-                }
-            }
+            // for(let i = 0; i < currentBoard.length; i++){
+            //     if(!currentBoard[i].innerHTML){
+            //         currentBoard[i].innerHTML = '<i class="fa-solid fa-x"></i>';
+            //         console.log("listen");
+            //         break;
+            //     }
+            // }
+            let randomSquare = Math.floor(Math.random() * 7);
+            let count = 0;
+            while(count < 1){
+                if (!currentBoard[randomSquare].innerHTML){
+                    currentBoard[randomSquare].innerHTML = '<i class="fa-solid fa-x"></i>';
+                    count++;
+               } else {
+                randomSquare = Math.floor(Math.random() * 7);
+               }
+            }   
     }
         getBoardState(document.getElementsByClassName("cell"));
         const isWinner = winCheck(gameState.boardState);
@@ -281,7 +291,7 @@ const computerBlockPossible = () => {
             return (i * 3) + openSlotIdx;
         }
     }
-    //check columns for possible win
+    //check columns for possible block
     for(let i = 0; i < gameState.boardState.length; i++) {
         const col = getCol(gameState.boardState, i);
         let openSlots = [];
@@ -299,7 +309,7 @@ const computerBlockPossible = () => {
             return (openSlotIdx * 3) + i;
         }
     }
-    //check diagonals for possible win
+    //check diagonals for possible block
     for(let i = 0; i < 3; i+=2) {
         const diag = getDiag(gameState.boardState, i);
         let openSlots = [];
@@ -341,12 +351,15 @@ playerNumberButton.addEventListener("click", () => {
             playerNumberSection.style.display = "none";
             playersSection.style.display = "block";
             playerOneSection.style.display = "none";
+            playerTwoSection.style.display = "block";
             gameState.numberOfPlayers = inputValue;
             playerNumberInput.value = "";
             gameState.playerOneName = "Computer";
         } else if(inputValue === 2) {
             playerNumberSection.style.display = "none";
             playersSection.style.display = "block";
+            playerOneSection.style.display = "block";
+            playerTwoSection.style.display = "block";
             gameState.numberOfPlayers = inputValue;
             playerNumberInput.value = "";
         } else {
@@ -442,8 +455,9 @@ const resetGame = () => {
     board.innerHTML = "";
     currentPlayerDisplay.innerText = "";
     versus[0].innerText = "";
-    playerOneSection.style.display = "block";
-    playerTwoSection.style.display = "block";
+    // playerOneSection.style.display = "block";
+    // playerTwoSection.style.display = "block";
+    playerNumberSection.style.display = "block";
     newGameButton.style.display = "none";
 }
 
@@ -468,11 +482,10 @@ testButton.addEventListener("click", () => {
 });
 
 //Bugs
-//clicking new game doesn't ask number of players
 //X or O won't display until after win/draw alert is closed
 
 //To Do
-//make computer smarter
+//Switch Computer to player 2
 //0 player easter egg 
 //add different icons to use
 
