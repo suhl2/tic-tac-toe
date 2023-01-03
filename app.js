@@ -159,22 +159,15 @@ const computerTurn = () => {
         const compCanWin = computerWinPossible();
         const compCanBlock = computerBlockPossible();
         if (compCanWin){
-            currentBoard[compCanWin].innerHTML = '<i class="fa-solid fa-x"></i>';
+            currentBoard[compCanWin].innerHTML = '<i class="fa-solid fa-o"></i>';
         } else if(compCanBlock){
-            currentBoard[compCanBlock].innerHTML = '<i class="fa-solid fa-x"></i>';
+            currentBoard[compCanBlock].innerHTML = '<i class="fa-solid fa-o"></i>';
         } else{
-            // for(let i = 0; i < currentBoard.length; i++){
-            //     if(!currentBoard[i].innerHTML){
-            //         currentBoard[i].innerHTML = '<i class="fa-solid fa-x"></i>';
-            //         console.log("listen");
-            //         break;
-            //     }
-            // }
             let randomSquare = Math.floor(Math.random() * 7);
             let count = 0;
             while(count < 1){
                 if (!currentBoard[randomSquare].innerHTML){
-                    currentBoard[randomSquare].innerHTML = '<i class="fa-solid fa-x"></i>';
+                    currentBoard[randomSquare].innerHTML = '<i class="fa-solid fa-o"></i>';
                     count++;
                } else {
                 randomSquare = Math.floor(Math.random() * 7);
@@ -199,7 +192,7 @@ const computerTurn = () => {
             clearInterval(computerInterval);
             return;
         }
-        gameState.currentPlayer = gameState.playerTwoName;
+        gameState.currentPlayer = gameState.playerOneName;
         currentPlayerDisplay.innerText = `Current Player: ${gameState.currentPlayer}`;
     }
 }
@@ -217,7 +210,7 @@ const computerWinPossible = () => {
             if(!row[j]) {
                 openSlots.push(j);
                 openSlotIdx = j;
-            } else if(row[j] === "X") {
+            } else if(row[j] === "O") {
                 occupiedSlots.push(row[j]);
             }
         }
@@ -236,7 +229,7 @@ const computerWinPossible = () => {
             if(!col[j]) {
                 openSlots.push(j);
                 openSlotIdx = j;
-            } else if(col[j] === "X") {
+            } else if(col[j] === "O") {
                 occupiedSlots.push(col[j]);
             }
         }
@@ -258,7 +251,7 @@ const computerWinPossible = () => {
                 } else {
                     openSlotIdx = (j * 2) + 2;
                 }
-            } else if(diag[j] === "X") {
+            } else if(diag[j] === "O") {
                 occupiedSlots.push(diag[j]);
             }
         }
@@ -283,7 +276,7 @@ const computerBlockPossible = () => {
             if(!row[j]) {
                 openSlots.push(j);
                 openSlotIdx = j;
-            } else if(row[j] === "O") {
+            } else if(row[j] === "X") {
                 occupiedSlots.push(row[j]);
             }
         }
@@ -301,7 +294,7 @@ const computerBlockPossible = () => {
             if(!col[j]) {
                 openSlots.push(j);
                 openSlotIdx = j;
-            } else if(col[j] === "O") {
+            } else if(col[j] === "X") {
                 occupiedSlots.push(col[j]);
             }
         }
@@ -323,7 +316,7 @@ const computerBlockPossible = () => {
                 } else {
                     openSlotIdx = (j * 2) + 2;
                 }
-            } else if(diag[j] === "O") {
+            } else if(diag[j] === "X") {
                 occupiedSlots.push(diag[j]);
             }
         }
@@ -332,8 +325,6 @@ const computerBlockPossible = () => {
         }
     }
 }
-//if not, copmuter will choose a random square
-
 
 //Set number of players
 
@@ -350,11 +341,11 @@ playerNumberButton.addEventListener("click", () => {
         if(inputValue === 1){
             playerNumberSection.style.display = "none";
             playersSection.style.display = "block";
-            playerOneSection.style.display = "none";
-            playerTwoSection.style.display = "block";
+            playerOneSection.style.display = "block";
+            playerTwoSection.style.display = "none";
             gameState.numberOfPlayers = inputValue;
             playerNumberInput.value = "";
-            gameState.playerOneName = "Computer";
+            gameState.playerTwoName = "Computer";
         } else if(inputValue === 2) {
             playerNumberSection.style.display = "none";
             playersSection.style.display = "block";
@@ -485,7 +476,6 @@ testButton.addEventListener("click", () => {
 //X or O won't display until after win/draw alert is closed
 
 //To Do
-//Switch Computer to player 2
 //0 player easter egg 
 //add different icons to use
 
