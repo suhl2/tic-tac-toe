@@ -163,14 +163,14 @@ const computerTurn = () => {
         } else if(compCanBlock){
             currentBoard[compCanBlock].innerHTML = '<i class="fa-solid fa-o"></i>';
         } else{
-            let randomSquare = Math.floor(Math.random() * 7);
+            let randomSquare = Math.floor(Math.random() * 9);
             let count = 0;
             while(count < 1){
                 if (!currentBoard[randomSquare].innerHTML){
                     currentBoard[randomSquare].innerHTML = '<i class="fa-solid fa-o"></i>';
                     count++;
                } else {
-                randomSquare = Math.floor(Math.random() * 7);
+                randomSquare = Math.floor(Math.random() * 9);
                }
             }   
     }
@@ -325,7 +325,64 @@ const computerBlockPossible = () => {
         }
     }
 }
+//Zero Player Easter Egg
+//check to see if board is full
+const isBoardFull = () => {
+    getBoardState(document.getElementsByClassName("cell"));
+    let boardIsFull = true;
+    for(let i = 0; i < gameState.boardState.length; i++){
+        for(let j = 0; j < gameState.boardState[i].length; j++){
+            if(!gameState.boardState[i][j]){
+                boardIsFull = false;
+            }
+        }
+    }
+    return boardIsFull;
+}
 
+const computerVsComputer = () => {
+    let computerTurn = 1;
+    const board = document.getElementsByClassName("cell");
+    getBoardState(board);
+    console.log(computerTurn % 2);
+    for(let i = 0; i < 9; i++){
+        let isEmpty = false;
+        let index = 0;
+        while(!isEmpty){
+            index = Math.floor(Math.random() * 9);
+            if(!board[index].innerHTML){
+                console.log("empty cell");
+                isEmpty = true;
+            } else {
+                console.log("occupied cell");
+                }   
+        }
+        if(computerTurn % 2 === 1) {
+            board[index].innerHTML = '<i class="fa-solid fa-x"></i>';
+            computerTurn = 2;
+        } else {
+            board[index].innerHTML = '<i class="fa-solid fa-o"></i>';
+            computerTurn = 1;
+        }
+    }
+    //make stuff show up slowly (may need to use set interval)
+    //computer will not win, always tie
+    //after a board is full, clear it and start over
+    //do this five times
+    //easter egg pop up
+
+}
+const easterEgg = () => {
+    alert("Cool easter egg will be added soon!");
+    playerNumberSection.style.display = "none";
+    makeBoard();
+    playersSection.style.display = "block";
+    playerOneSection.style.display = "none";
+    playerTwoSection.style.display = "none";
+    versus[0].innerText = `It's Computer vs Computer`;
+    versus[0].style.display = "block";
+    const cells = document.getElementsByClassName("cell");
+}
 //Set number of players
 
 playerNumberButton.addEventListener("click", () => {
@@ -354,7 +411,7 @@ playerNumberButton.addEventListener("click", () => {
             gameState.numberOfPlayers = inputValue;
             playerNumberInput.value = "";
         } else {
-            alert("Cool easter egg will be added soon!")
+            easterEgg();
         }
     }
 } );
@@ -468,8 +525,11 @@ testButton.addEventListener("click", () => {
     // console.log(winCheck(gameState.boardState));
     // const isWin = computerWinPossible();
     // console.log(isWin);
-    const isBlock = computerBlockPossible();
-    console.log(isBlock);
+    // const isBlock = computerBlockPossible();
+    // console.log(isBlock);
+    const fullBoard = isBoardFull();
+    console.log(fullBoard);
+    computerVsComputer();
 });
 
 //Bugs
