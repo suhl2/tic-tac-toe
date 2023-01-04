@@ -340,6 +340,13 @@ const isBoardFull = () => {
     return boardIsFull;
 }
 
+const clearBoard = () => {
+    const board = document.getElementsByClassName("cell");
+    for(let i = 0; i < board.length; i++){
+        board[i].innerHTML = "";
+    }
+}
+
 const computerVsComputer = () => {
     let computerTurn = 1;
     const board = document.getElementsByClassName("cell");
@@ -365,15 +372,12 @@ const computerVsComputer = () => {
             computerTurn = 1;
         }
     }
-    //make stuff show up slowly (may need to use set interval)
     //computer will not win, always tie
-    //after a board is full, clear it and start over
-    //do this five times
-    //easter egg pop up
 
 }
 const easterEgg = () => {
-    alert("Cool easter egg will be added soon!");
+    let count = 0;
+    alert("Computer will play itself");
     playerNumberSection.style.display = "none";
     makeBoard();
     playersSection.style.display = "block";
@@ -382,6 +386,18 @@ const easterEgg = () => {
     versus[0].innerText = `It's Computer vs Computer`;
     versus[0].style.display = "block";
     const cells = document.getElementsByClassName("cell");
+    const interval = setInterval( () => {
+        count++;
+        console.log(count);
+        computerVsComputer();
+        setTimeout(clearBoard, 1000);
+        if(count > 5){
+            clearInterval(interval);
+        }
+    }, 1200);
+    setTimeout( () =>{
+        alert("A strange game.  The only winning move is not to play.  How about a nice game of chess?");
+    }, 8500);
 }
 //Set number of players
 
@@ -513,6 +529,7 @@ newGameButton.addEventListener("click", resetGame);
 
 //Test button
 testButton.addEventListener("click", () => {
+    let count = 0;
     const board = getBoardState(document.getElementsByClassName("cell"));
     // console.log(document.getElementsByClassName("cell"));
     // console.log(gameState.boardState);
@@ -529,7 +546,15 @@ testButton.addEventListener("click", () => {
     // console.log(isBlock);
     const fullBoard = isBoardFull();
     console.log(fullBoard);
-    computerVsComputer();
+    const interval = setInterval( () => {
+        count++;
+        console.log(count);
+        computerVsComputer();
+        setTimeout(clearBoard, 1000);
+        if(count > 5){
+            clearInterval(interval);
+        }
+    }, 1200);
 });
 
 //Bugs
