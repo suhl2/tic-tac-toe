@@ -9,7 +9,6 @@ const playerOneSection = document.getElementById("player-one");
 const playerTwoSection = document.getElementById("player-two");
 const currentPlayerDisplay = document.getElementById("current-player");
 const versus = document.getElementsByTagName("h2");
-const testButton = document.getElementById("test");
 const newGameButton = document.getElementById("new-game");
 const playerNumberSection = document.getElementById("select-player-number");
 const playerNumberInput = document.getElementById("player-number-input");
@@ -20,7 +19,6 @@ let computerInterval = null;
 
 //Game State
 const gameState = {
-    numberOfPlayers: 0,
     currentPlayer: "Player 1",
     playerOneName: "",
     playerTwoName: "",
@@ -154,8 +152,6 @@ const tieCheck = (array) => {
 const computerTurn = () => {
     if(gameState.currentPlayer === "Computer"){
         const currentBoard = document.getElementsByClassName("cell");
-        console.log(currentBoard);
-        console.log("hey");
         const compCanWin = computerWinPossible();
         const compCanBlock = computerBlockPossible();
         if (compCanWin){
@@ -178,7 +174,9 @@ const computerTurn = () => {
         const isWinner = winCheck(gameState.boardState);
         if (isWinner){
             gameState.winner = gameState.currentPlayer;
-            alert(`${gameState.winner} wins!`);
+            setTimeout(() => {
+                alert(`${gameState.winner} wins!`);
+            }, 100);
             currentPlayerDisplay.innerText = `${gameState.winner} is the winner!`;
             newGameButton.style.display = "flex";
             clearInterval(computerInterval);
@@ -186,7 +184,9 @@ const computerTurn = () => {
         }
         const isTie = tieCheck(gameState.boardState);
         if (isTie){
-            alert("The game is a draw.");
+            setTimeout(() => {
+                alert("The game is a draw.");
+            }, 100);
             currentPlayerDisplay.innerText = "The game is a draw";
             newGameButton.style.display = "flex";
             clearInterval(computerInterval);
@@ -261,9 +261,6 @@ const computerWinPossible = () => {
     }
 }
     
-
-
-//if not, computer will go for a block if possible
 const computerBlockPossible = () => {
     getBoardState(document.getElementsByClassName("cell"));
     //check rows for possible block
@@ -326,43 +323,24 @@ const computerBlockPossible = () => {
     }
 }
 //Zero Player Easter Egg
-//check to see if board is full
-const isBoardFull = () => {
-    getBoardState(document.getElementsByClassName("cell"));
-    let boardIsFull = true;
-    for(let i = 0; i < gameState.boardState.length; i++){
-        for(let j = 0; j < gameState.boardState[i].length; j++){
-            if(!gameState.boardState[i][j]){
-                boardIsFull = false;
-            }
-        }
-    }
-    return boardIsFull;
-}
-
 const clearBoard = () => {
     const board = document.getElementsByClassName("cell");
     for(let i = 0; i < board.length; i++){
         board[i].innerHTML = "";
     }
 }
-
 const computerVsComputer = () => {
     let computerTurn = 1;
     const board = document.getElementsByClassName("cell");
     getBoardState(board);
-    console.log(computerTurn % 2);
     for(let i = 0; i < 9; i++){
         let isEmpty = false;
         let index = 0;
         while(!isEmpty){
             index = Math.floor(Math.random() * 9);
             if(!board[index].innerHTML){
-                console.log("empty cell");
                 isEmpty = true;
-            } else {
-                console.log("occupied cell");
-                }   
+            }
         }
         if(computerTurn % 2 === 1) {
             board[index].innerHTML = '<i class="fa-solid fa-x"></i>';
@@ -372,8 +350,6 @@ const computerVsComputer = () => {
             computerTurn = 1;
         }
     }
-    //computer will not win, always tie
-
 }
 const easterEgg = () => {
     let count = 0;
@@ -388,7 +364,6 @@ const easterEgg = () => {
     const cells = document.getElementsByClassName("cell");
     const interval = setInterval( () => {
         count++;
-        console.log(count);
         computerVsComputer();
         setTimeout(clearBoard, 1000);
         if(count > 5){
@@ -398,6 +373,7 @@ const easterEgg = () => {
     setTimeout( () =>{
         alert("A strange game.  The only winning move is not to play.  How about a nice game of chess?");
     }, 8500);
+    newGameButton.style.display = "flex";
 }
 //Set number of players
 
@@ -416,7 +392,6 @@ playerNumberButton.addEventListener("click", () => {
             playersSection.style.display = "block";
             playerOneSection.style.display = "block";
             playerTwoSection.style.display = "none";
-            gameState.numberOfPlayers = inputValue;
             playerNumberInput.value = "";
             gameState.playerTwoName = "Computer";
         } else if(inputValue === 2) {
@@ -424,9 +399,9 @@ playerNumberButton.addEventListener("click", () => {
             playersSection.style.display = "block";
             playerOneSection.style.display = "block";
             playerTwoSection.style.display = "block";
-            gameState.numberOfPlayers = inputValue;
             playerNumberInput.value = "";
         } else {
+            playerNumberInput.value = "";
             easterEgg();
         }
     }
@@ -443,14 +418,18 @@ board.addEventListener("click", (event) => {
         const isWinner = winCheck(gameState.boardState);
         if (isWinner){
             gameState.winner = gameState.currentPlayer;
-            alert(`${gameState.winner} wins!`);
+            setTimeout(() => {
+                alert(`${gameState.winner} wins!`);
+            }, 100);
             currentPlayerDisplay.innerText = `${gameState.winner} is the winner!`;
             newGameButton.style.display = "flex";
             return;
         }
         const isTie = tieCheck(gameState.boardState);
         if (isTie){
-            alert("The game is a draw.");
+            setTimeout(() => {
+                alert(`The game is a draw.`);
+            }, 100);
             currentPlayerDisplay.innerText = "The game is a draw";
             newGameButton.style.display = "flex";
             return;
@@ -464,7 +443,9 @@ board.addEventListener("click", (event) => {
         const isWinner = winCheck(gameState.boardState);
         if (isWinner){
             gameState.winner = gameState.currentPlayer;
-            alert(`${gameState.winner} wins!`);
+            setTimeout(() => {
+                alert(`${gameState.winner} wins!`);
+            }, 100);
             currentPlayerDisplay.innerText = `${gameState.winner} is the winner!`;
             newGameButton.style.display = "flex";
             return;
@@ -486,11 +467,7 @@ playersSection.addEventListener("click", (event) => {
         gameState.playerTwoName = playerTwoInput.value;
         playerTwoInput.value = "";
         playerTwoSection.style.display = "none";
-    } else if (buttonId === "computer") {
-        gameState.playerOneName = "Computer";
-        playerOneInput.value = "";
-        playerOneSection.style.display = "none";
-    }
+    } 
     if (gameState.playerOneName !== "" && gameState.playerTwoName !== "") {
         if(gameState.playerOneName === gameState.playerTwoName){
             gameState.playerTwoName += "2";
@@ -509,7 +486,6 @@ playersSection.addEventListener("click", (event) => {
 
 //Reset Game
 const resetGame = () => {
-    gameState.numberOfPlayers = 0;
     gameState.currentPlayer = "Player 1";
     gameState.playersSelected = false;
     gameState.boardState = [["", "", ""], ["", "", ""], ["", "", ""]];
@@ -519,53 +495,8 @@ const resetGame = () => {
     board.innerHTML = "";
     currentPlayerDisplay.innerText = "";
     versus[0].innerText = "";
-    // playerOneSection.style.display = "block";
-    // playerTwoSection.style.display = "block";
     playerNumberSection.style.display = "block";
     newGameButton.style.display = "none";
 }
 
 newGameButton.addEventListener("click", resetGame);
-
-//Test button
-testButton.addEventListener("click", () => {
-    let count = 0;
-    const board = getBoardState(document.getElementsByClassName("cell"));
-    // console.log(document.getElementsByClassName("cell"));
-    // console.log(gameState.boardState);
-    // console.log(getRow(gameState.boardState, 0));
-    // console.log(getCol(gameState.boardState, 1));
-    // console.log(flattenBoard(gameState.boardState));
-    // console.log(getDiag(gameState.boardState, 0));
-    // console.log(getDiag(gameState.boardState, 2))
-    // console.log(winCheck(getRow(gameState.boardState, 0)));
-    // console.log(winCheck(gameState.boardState));
-    // const isWin = computerWinPossible();
-    // console.log(isWin);
-    // const isBlock = computerBlockPossible();
-    // console.log(isBlock);
-    const fullBoard = isBoardFull();
-    console.log(fullBoard);
-    const interval = setInterval( () => {
-        count++;
-        console.log(count);
-        computerVsComputer();
-        setTimeout(clearBoard, 1000);
-        if(count > 5){
-            clearInterval(interval);
-        }
-    }, 1200);
-});
-
-//Bugs
-//X or O won't display until after win/draw alert is closed
-
-//To Do
-//0 player easter egg 
-//add different icons to use
-
-//Cleanup
-//remove console.logs
-//remove computer button
-//remove test button
-//clean up code

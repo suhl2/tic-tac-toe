@@ -11,17 +11,25 @@
     display: flex;
     flex-flow: row wrap;
     max-width: 700px;
+    padding-top: 20px;
     margin: auto;
   }
 
   .cell {
-    border: 8px dashed white;
     height: 200px;
     width: 200px;
   }
   .cell i {
     font-size: 4em;
     padding: 60px;
+  }
+  .cell:nth-child(n+4):nth-child(-n+6) {
+    border-top: 5px dashed white;
+    border-bottom: 5px dashed white;
+  }
+  .cell:nth-child(3n+2) { 
+    border-left: 5px dashed white;
+    border-right: 5px dashed white;
   }
 
   #current-player {
