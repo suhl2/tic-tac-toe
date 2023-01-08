@@ -376,7 +376,6 @@ const easterEgg = () => {
     newGameButton.style.display = "flex";
 }
 //Set number of players
-
 playerNumberButton.addEventListener("click", () => {
     const inputValue = Number(playerNumberInput.value);
     if(inputValue > 2 || inputValue < 0) {
@@ -455,7 +454,6 @@ board.addEventListener("click", (event) => {
     }
    }
 });
-
 //Click to set player names
 playersSection.addEventListener("click", (event) => {
     const buttonId = event.target.getAttribute("id");
